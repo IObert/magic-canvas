@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://www.twilio.com/docs/static/img/favicons/favicon.ico"
+    />
+
+    <script>
+      // let lastTimeout;
+      // document
+      //   .querySelectorAll(".button")
+      //   .forEach((tag) => (tag.classList = "button"));
+      // lastTimeout && clearTimeout(lastTimeout);
+      // toShow = document.querySelector("#twilio-button");
+      // toShow.classList.add("end-state");
+      // lastTimeout = setTimeout(() => (toShow.classList = "button"), 3000);
+    </script>
+    <title>Twilio Magic Demo</title>
+
+    <link href="./cube.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="text-instructions">
+      Text <span>Magic</span> to <span id="number">+49 1573 5996840</span>
+    </div>
+
+    <div class="text-instructions">
+      <div class="cube">
+        <div class="text-instruction cube__face cube__face--front">
+          Call <span id="number">+49 1573 5996840</span> and say
+          <span>Magic</span>
+        </div>
+        <div class="text-instruction cube__face cube__face--back">
+          Text <span>Magic</span> to <span id="number">+49 1573 5996840</span>
+        </div>
+        <div class="text-instruction cube__face cube__face--top">
+          WhatsApp <span>Magic</span> to
+          <span id="number">+49 1573 5996840</span>
+        </div>
+        <div class="text-instruction cube__face cube__face--bottom">
+          Email <span>Magic</span> to <span id="number">magic@twilio.com</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="twilio-button" class="button">
+      <svg
+        fill="#F22F46"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 30 30"
+      >
+        <path
+          d="M15 0C6.7 0 0 6.7 0 15s6.7 15 15 15 15-6.7 15-15S23.3 0 15 0zm0 26C8.9 26 4 21.1 4 15S8.9 4 15 4s11 4.9 11 11-4.9 11-11 11zm6.8-14.7c0 1.7-1.4 3.1-3.1 3.1s-3.1-1.4-3.1-3.1 1.4-3.1 3.1-3.1 3.1 1.4 3.1 3.1zm0 7.4c0 1.7-1.4 3.1-3.1 3.1s-3.1-1.4-3.1-3.1c0-1.7 1.4-3.1 3.1-3.1s3.1 1.4 3.1 3.1zm-7.4 0c0 1.7-1.4 3.1-3.1 3.1s-3.1-1.4-3.1-3.1c0-1.7 1.4-3.1 3.1-3.1s3.1 1.4 3.1 3.1zm0-7.4c0 1.7-1.4 3.1-3.1 3.1S8.2 13 8.2 11.3s1.4-3.1 3.1-3.1 3.1 1.4 3.1 3.1z"
+        ></path>
+      </svg>
+    </div>
+
+    <div id="sendgrid-button" class="button">
+      <svg
+        fill="#F22F46"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 30 30"
+      >
+        <path
+          d="M15 0C6.7 0 0 6.7 0 15s6.7 15 15 15 15-6.7 15-15S23.3 0 15 0z"
+        ></path>
+      </svg>
+    </div>
+  </body>
+</html>
