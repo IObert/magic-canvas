@@ -24,7 +24,7 @@ body {
 .magic-container {
   position: relative;
   width: 100%;
-  height: 90%;
+  height: 100%;
   background: #0E1229;
   display: flex;
   flex-direction: column;
@@ -39,23 +39,22 @@ body {
   background: #0E1229;
 }
 
-.magic-container .text-instruction,
+.magic-container .text-instructions,
 .magic-container .goal-info {
   font-family: "Courier New";
   position: absolute;
   letter-spacing: 0.5px;
-  top: 0;
-  right: 7%;
+  top: -25px;
+  right: 20px;
   text-align: right;
   text-transform: uppercase;
   font-weight: 900;
   color: #ABB1CF;
-  padding: 10px 0;
   font-size: 2em;
   text-shadow: 0 0 10px black;
 }
 
-.magic-container .text-instruction span,
+.magic-container .text-instructions span,
 .magic-container .goal-info span {
   color: #DF444D;
 }
@@ -164,7 +163,6 @@ body {
   overflow: hidden;
   display: inline-block;
   vertical-align: bottom;
-  -webkit-animation: ellipsis steps(4, end) 1300ms infinite;
   animation: ellipsis steps(4, end) 1300ms infinite;
   content: "\2026";
   /* ascii code for the ellipsis character */
@@ -177,9 +175,87 @@ body {
   }
 }
 
-@-webkit-keyframes ellipsis {
-  to {
-    width: 1.25em;
-  }
+
+
+/* Rotation instructions */
+
+.text-instructions {
+  width: 650px;
+  height: 100px;
+  perspective: 400px;
 }
 
+.cube {
+  animation-name: rotation;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite;
+  animation-duration: 20s;
+  width: 650px;
+  height: 100px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 1s;
+}
+
+.cube__face {
+  position: absolute;
+  width: 650px;
+  height: 100px;
+  line-height: 100px;
+  font-size: 22pt;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+}
+
+.cube__face--front {
+  opacity: 0.95;
+  background: hsla(231, 49%, 11%, 0.95);
+}
+.cube__face--back {
+  opacity: 0.95;
+  background: hsla(231, 49%, 11%, 0.95);
+}
+.cube__face--top {
+  opacity: 0.95;
+  background: hsla(231, 49%, 11%, 0.95);
+}
+.cube__face--bottom {
+  opacity: 0.95;
+  background: hsla(231, 49%, 11%, 0.95);
+}
+
+.cube__face--front {
+  transform: rotateX(0deg) translateZ(50px);
+}
+.cube__face--bottom {
+  transform: rotateX(90deg) translateZ(50px);
+}
+.cube__face--back {
+  transform: rotateX(180deg) translateZ(50px);
+}
+.cube__face--top {
+  transform: rotateX(270deg) translateZ(50px);
+}
+
+@keyframes rotation {
+  from,
+  20% {
+    transform: translateZ(-50px) rotateX(0deg);
+  }
+  25%,
+  45% {
+    transform: translateZ(-50px) rotateX(90deg);
+  }
+  50%,
+  70% {
+    transform: translateZ(-50px) rotateX(180deg);
+  }
+  75%,
+  90% {
+    transform: translateZ(-50px) rotateX(270deg);
+  }
+  to {
+    transform: translateZ(-50px) rotateX(360deg);
+  }
+}

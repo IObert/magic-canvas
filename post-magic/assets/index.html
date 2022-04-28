@@ -5,7 +5,11 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="icon" type="image/x-icon" href="https://www.twilio.com/docs/static/img/favicons/favicon.ico">
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://www.twilio.com/docs/static/img/favicons/favicon.ico"
+    />
 
     <title>Twilio Magic Demo</title>
 
@@ -23,13 +27,34 @@
     <div class="magic-container">
       <canvas id="canvas"></canvas>
       <div class="red-stripe"></div>
+      <div class="text-instructions">
+        <div class="cube">
+          <div class="text-instruction cube__face cube__face--front">
+            Call <span class="number">+49 1573 5996840</span>
+            <!-- <span id="number"></span> USE THIS IN PROD -->
+            and say <span>Magic</span>
+          </div>
+          <div class="text-instruction cube__face cube__face--back">
+            Text <span>Magic</span> to
+            <span class="number">+49 1573 5996840</span>
+            <!-- <span id="number"></span> USE THIS IN PROD -->
+          </div>
+          <div class="text-instruction cube__face cube__face--top">
+            WhatsApp <span>Magic</span> to
+            <span class="number">+49 1573 5996840</span>
+            <!-- <span id="number"></span> USE THIS IN PROD -->
+          </div>
+          <div class="text-instruction cube__face cube__face--bottom">
+            Email <span>Magic</span> to
+            <span class="email">magic@twilio.com</span>
+            <!-- <span id="email"></span> USE THIS IN PROD -->
+          </div>
+        </div>
+      </div>
       <div class="text-container">
         <div class="circles">
           <div class="circle-with-text">Software Applications</div>
           <div class="circle-with-text">Communications Systems</div>
-        </div>
-        <div class="text-instruction">
-          Text <span>Magic</span> to <span id="number"></span>
         </div>
       </div>
       <div class="results">

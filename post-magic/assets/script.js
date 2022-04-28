@@ -216,7 +216,8 @@ document.onreadystatechange = function () {
 
     getSyncToken(function (responseData) {
       startSync(responseData.token);
-      document.querySelector("#number").textContent = formatPhoneNumber(
+      debugger // TODO set number and email here
+      document.querySelector(".number").textContent = formatPhoneNumber(
         responseData.number
       );
     });
