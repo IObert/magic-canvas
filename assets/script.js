@@ -1,6 +1,7 @@
 /* Particle Explosion by Dean Wagman https://codepen.io/deanwagman/pen/EjLBdQ */
 let canvas = document.querySelector("#canvas"),
-  ctx = canvas.getContext("2d");
+  ctx = canvas.getContext("2d"),
+  lastTimeout;
 
 // Set Canvas to be window size
 canvas.width = window.innerWidth;
@@ -169,8 +170,18 @@ document.onreadystatechange = function () {
         shownMagics.push(magic.index);
         cleanUpArray();
         initParticles(config.particleNumber, config.x, config.y);
-        document.querySelector(".circle-with-text").classList.add("end-state");
-        document.querySelector("#button").classList.add("end-state");
+        // document.querySelector(".circle-with-text").classList.add("end-state");
+        // document.querySelector("#button").classList.add("end-state");
+
+        document
+          .querySelectorAll(".button")
+          .forEach((tag) => (tag.classList = "button"));
+        lastTimeout && clearTimeout(lastTimeout);
+        // debugger
+        const buttonId = `#${magic.data.channel}-button`;
+        toShow = document.querySelector(buttonId);
+        toShow.classList.add("end-state");
+        lastTimeout = setTimeout(() => (toShow.classList = "button"), 5000);
         document.querySelector("#waiting").innerHTML =
           '<span class="red">' +
           magic.data.name +
@@ -179,10 +190,32 @@ document.onreadystatechange = function () {
       }
     }
 
+    // Show some magic every 30 seconds when inactive
+    setInterval(() => {
+      insertMagic({
+        index: shownMagics.length,
+        data: { name: "Marius", channel: "twilio" },
+      });
+    }, 30000);
+
+    //TODO remove next line
+    window.insertMagic = insertMagic;
+
     // Function to get Sync token from Twilio Function
     function getSyncToken(callback) {
       fetch("/sync_token")
-        .then((response) => response.json())
+        .then((response) => {
+          if (response.status >= 400) {
+            if (
+              location.hostname !== "localhost" &&
+              location.hostname !== "127.0.0.1"
+            ) {
+              console.error("Error: " + e);
+            }
+          } else {
+            return response.json();
+          }
+        })
         .then(callback);
     }
 
@@ -202,24 +235,14 @@ document.onreadystatechange = function () {
       });
     }
 
-    function formatPhoneNumber(phoneNumberString) {
-      var cleaned = ("" + phoneNumberString).replace(/\D/g, "");
-      var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
-      if (match) {
-        var intlCode = match[1] ? "+1 " : "";
-        return [intlCode, "(", match[2], ") ", match[3], "-", match[4]].join(
-          ""
-        );
-      } //TODO formating international
-      return phoneNumberString;
-    }
-
     getSyncToken(function (responseData) {
-      startSync(responseData.token);
-      debugger // TODO set number and email here
-      document.querySelector(".number").textContent = formatPhoneNumber(
-        responseData.number
-      );
+      if (responseData) {
+        startSync(responseData.token);
+        document
+          .querySelectorAll(".number")
+          .forEach((tag) => (tag.textContent = responseData.number));
+        document.querySelector("#email").textContent = responseData.email;
+      }
     });
   }
 };

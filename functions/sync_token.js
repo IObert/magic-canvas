@@ -28,6 +28,7 @@ exports.handler = function (context, _, callback) {
   response.setBody({
     token: accessToken.toJwt(),
     number: context.TWILIO_PHONE_NUMBER,
+    email: context.SENDGRID_EMAIL_ADDRESS,
   });
 
   callback(null, response);

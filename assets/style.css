@@ -25,7 +25,7 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
-  background: #0E1229;
+  background: #0e1229;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -36,7 +36,7 @@ body {
   position: absolute;
   height: 100%;
   width: 100%;
-  background: #0E1229;
+  background: #0e1229;
 }
 
 .magic-container .text-instructions,
@@ -49,14 +49,14 @@ body {
   text-align: right;
   text-transform: uppercase;
   font-weight: 900;
-  color: #ABB1CF;
+  color: #abb1cf;
   font-size: 2em;
   text-shadow: 0 0 10px black;
 }
 
 .magic-container .text-instructions span,
 .magic-container .goal-info span {
-  color: #DF444D;
+  color: #df444d;
 }
 
 .magic-container .goal-info {
@@ -76,7 +76,7 @@ body {
   height: 20px;
   top: 0;
   left: 7%;
-  background: #DF444D;
+  background: #df444d;
   z-index: 9999;
 }
 
@@ -93,7 +93,7 @@ body {
 }
 
 .magic-container .text-container .circle-with-text {
-  border: 2px solid #ABB1CF;
+  border: 2px solid #abb1cf;
   justify-content: center;
   align-items: center;
   border-radius: 100%;
@@ -104,12 +104,12 @@ body {
   display: flex;
   height: 225px;
   width: 225px;
-  color: #DFE1F0;
+  color: #dfe1f0;
   transition: all 0.5s ease;
 }
 
 .magic-container .text-container .small {
-  color: #ABB1CF;
+  color: #abb1cf;
   font-size: 3em;
   margin-bottom: 10px;
   text-align: center;
@@ -118,13 +118,17 @@ body {
 .magic-container .text-container .large {
   font-family: "Playfair Display", serif;
   font-size: 7em;
-  color: #DFE1F0;
+  color: #dfe1f0;
   text-align: center;
 }
 
-.magic-container #button {
-  position: absolute;
+#twilio-button {
   background: #fff;
+}
+
+.magic-container .button {
+  position: absolute;
+  background-color: #f22f46;
   border-radius: 100%;
   z-index: 999999;
   width: 0;
@@ -133,7 +137,7 @@ body {
   transition: all 0.5s ease;
 }
 
-.magic-container #button.end-state {
+.magic-container .button.end-state {
   width: 110px;
   height: 110px;
   padding: 5px;
@@ -141,18 +145,18 @@ body {
 
 .magic-container .results {
   padding: 15px;
-  background: #0E1229;
+  background: #0e1229;
   width: 100%;
   position: absolute;
   bottom: 0;
   text-align: center;
   font-size: 1.5em;
-  color: #DFE1F0;
+  color: #dfe1f0;
   z-index: 999999;
 }
 
 .magic-container .results #waiting span.red {
-  color: #DF444D;
+  color: #df444d;
   text-transform: uppercase;
   font-family: "Courier New";
   font-weight: 900;
@@ -174,8 +178,6 @@ body {
     width: 1.25em;
   }
 }
-
-
 
 /* Rotation instructions */
 
