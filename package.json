@@ -9,10 +9,10 @@
   },
   "dependencies": {
     "twilio": "*",
-    "@twilio/runtime-handler": "1.2.2"
+    "@twilio/runtime-handler": "1.2.3"
   },
   "devDependencies": {
-    "twilio-run": "^3.4.1"
+    "twilio-run": "^3.4.2"
   },
   "engines": {
     "node": "16"
