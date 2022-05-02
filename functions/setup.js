@@ -61,7 +61,7 @@ exports.handler = async function (context, event, callback) {
       client
         .incomingPhoneNumbers(numberSid)
         .update({
-          smsUrl: "https://" + context.DOMAIN_NAME + "/receive_sms",
+          smsUrl: "https://" + context.DOMAIN_NAME + "/receive_message",
         })
         .then(() => {
           resolve("success");

@@ -190,13 +190,14 @@ document.onreadystatechange = function () {
       }
     }
 
-    // Show some magic every 30 seconds when inactive
+    // Show some magic randomly
+    const random3to8min = 1000 * 60 * Math.floor(Math.random() * 5 + 3);
     setInterval(() => {
       insertMagic({
         index: shownMagics.length,
         data: { name: "Marius", channel: "twilio" },
       });
-    }, 30000);
+    }, random3to8min);
 
     //TODO remove next line
     window.insertMagic = insertMagic;

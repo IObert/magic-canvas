@@ -1,11 +1,14 @@
 exports.handler = function (context, event, callback) {
+  const twiml = new Twilio.twiml.MessagingResponse();
   const regExMagic = /Magic/i;
   const regExMagicName = /Magic,? (\S*)/i;
-  const twiml = new Twilio.twiml.MessagingResponse();
 
   if (regExMagic.test(event.Body)) {
     const nameRes = regExMagicName.exec(event.Body);
     const name = (nameRes && nameRes[1]) || "Anonymous 🕵️";
+
+    const isWhatsapp = event.To.includes("whatsapp:");
+    const channel = isWhatsapp ? "whatsapp" : "sms";
     twiml.message(
       { to: event.From },
       `Nice! Thanks ${name} for sending us some Twilio Magic.`
@@ -16,7 +19,7 @@ exports.handler = function (context, event, callback) {
     let request = twilioClient.sync
       .services(context.SYNC_SERVICE_SID)
       .syncLists("MagicTexters")
-      .syncListItems.create({ data: { name } });
+      .syncListItems.create({ data: { name, channel } });
 
     request.then(function () {
       callback(null, twiml);
