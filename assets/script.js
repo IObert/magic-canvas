@@ -193,10 +193,12 @@ document.onreadystatechange = function () {
     // Show some magic randomly
     const random3to8min = 1000 * 60 * Math.floor(Math.random() * 5 + 3);
     setInterval(() => {
-      insertMagic({
-        index: shownMagics.length,
-        data: { name: "Marius", channel: "twilio" },
-      });
+      if (!document.hidden) {
+        insertMagic({
+          index: shownMagics.length,
+          data: { name: "Marius", channel: "twilio" },
+        });
+      }
     }, random3to8min);
 
     //TODO remove next line

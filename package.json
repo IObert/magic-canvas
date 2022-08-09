@@ -1,9 +1,10 @@
 {
-  "name": "post-magic",
+  "name": "magic-demo",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "setup": "node -r dotenv/config functions/setup.js",
     "start": "twilio-run",
     "deploy": "twilio-run deploy"
   },

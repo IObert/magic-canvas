@@ -1,5 +1,5 @@
 exports.handler = function (context, _, callback) {
-  const ACCOUNT_SID = context.ACCOUNT_SID;
+  const TWILIO_ACCOUNT_SID = context.TWILIO_ACCOUNT_SID;
   const SERVICE_SID = context.SYNC_SERVICE_SID;
   const API_KEY = context.TWILIO_API_KEY;
   const API_SECRET = context.TWILIO_API_SECRET;
@@ -20,7 +20,7 @@ exports.handler = function (context, _, callback) {
     serviceSid: SERVICE_SID,
   });
 
-  const accessToken = new AccessToken(ACCOUNT_SID, API_KEY, API_SECRET);
+  const accessToken = new AccessToken(TWILIO_ACCOUNT_SID, API_KEY, API_SECRET);
 
   accessToken.addGrant(syncGrant);
   accessToken.identity = IDENTITY;

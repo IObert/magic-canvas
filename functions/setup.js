@@ -1,6 +1,4 @@
 exports.handler = async function (context, event, callback) {
-  var fs = require("fs");
-
   // Check if we already ran and prevent duplicate setups.
   if (
     context.SYNC_SERVICE_SID &&
@@ -13,65 +11,7 @@ exports.handler = async function (context, event, callback) {
   // The Twilio node Client library
   const client = context.getTwilioClient();
 
-  // Creating API Key for use with Sync later
-  function createApiKey() {
-    return client.newKeys.create().catch((err) => {
-      throw new Error(err.details);
-    });
-  }
-
-  // Sync Service will be the data-store and event broadcaster
-  function createSyncService() {
-    return client.sync.services.create().catch((err) => {
-      throw new Error(err.details);
-    });
-  }
-
-  // The Sync List will be where specifically our MagicTexters live
-  function createSyncList(serviceSid) {
-    return client.sync
-      .services(serviceSid)
-      .syncLists.create({
-        uniqueName: "MagicTexters",
-      })
-      .catch((err) => {
-        throw new Error(err.details);
-      });
-  }
-
-  // Get the SID of the number previously specified in the ENV
-  function getPhoneNumberSid() {
-    return new Promise((resolve, reject) => {
-      client.incomingPhoneNumbers
-        .list({
-          phoneNumber: context.TWILIO_PHONE_NUMBER,
-          limit: 1,
-        })
-        .then((incomingPhoneNumbers) => {
-          const n = incomingPhoneNumbers[0];
-          resolve(n.sid);
-        })
-        .catch((err) => reject(err));
-    });
-  }
-
-  // Using the number's SID, update it's webhook to the Studio Flow
-  function updatePhoneNumberWebhook(numberSid) {
-    return new Promise((resolve, reject) => {
-      client
-        .incomingPhoneNumbers(numberSid)
-        .update({
-          smsUrl: "https://" + context.DOMAIN_NAME + "/receive_message",
-        })
-        .then(() => {
-          resolve("success");
-        })
-        .catch((err) => reject(err));
-    });
-  }
-
-  // Above, we just set up the functions. Now we will actually
-  // call them one-by one to create these entities.
+  // Create the required entities one by one and link them.
 
   const key = await createApiKey();
   console.log("API Key created: " + key.sid);
@@ -83,8 +23,29 @@ exports.handler = async function (context, event, callback) {
   console.log("Sync List created: " + syncList.sid);
 
   const phoneNumberSid = await getPhoneNumberSid();
-  await updatePhoneNumberWebhook(phoneNumberSid);
-  console.log("Phone number sid updated: " + phoneNumberSid);
+  if (!context.ADVANCED_VOICE) {
+    await updatePhoneNumberWebhook(
+      phoneNumberSid,
+      "voiceUrl",
+      `https://${context.DOMAIN_NAME}/receive_call`
+    );
+    console.log(
+      `Phone number ${phoneNumberSid} updated with simple voice flow`
+    );
+  } else {
+    const flow = await deployStudioFlow();
+    await updatePhoneNumberWebhook(phoneNumberSid, "voiceUrl", flow.webhookUrl);
+    console.log(
+      `Phone number ${phoneNumberSid} updated with complex voice flow`
+    );
+  }
+
+  await unbindPhoneFromMessagingServices(phoneNumberSid);
+  const messagingService = await createMessagingService(); //TODO add message handler URL
+  await assignNumberToMessagingService(phoneNumberSid, messagingService.sid);
+  console.log(
+    `Messaging service ${messagingService.sid} assigned to ${phoneNumberSid}`
+  );
 
   // With all of our entities created, we need to store some
   // of them inside our hosted ENV in order for use later
@@ -106,6 +67,139 @@ exports.handler = async function (context, event, callback) {
    * HELPER FUNCTIONS
    *
    */
+
+  // Creating API Key for use with Sync later
+  function createApiKey() {
+    return client.newKeys
+      .create({ friendlyName: "magic_demo_keys" })
+      .catch((err) => {
+        throw new Error(err.details);
+      });
+  }
+
+  // Sync Service will be the data-store and event broadcaster
+  function createSyncService() {
+    return client.sync.services
+      .create({ friendlyName: "magic_demo_sync" })
+      .catch((err) => {
+        throw new Error(err.details);
+      });
+  }
+
+  // Sync Service will be the data-store and event broadcaster
+  function createMessagingService() {
+    return client.messaging.v1.services
+      .create({
+        friendlyName: "magic_demo_messaging",
+        inboundRequestUrl:
+          "https://" + context.DOMAIN_NAME + "/receive_message",
+        inboundMethod: "POST",
+      })
+      .catch((err) => {
+        throw new Error(err.details);
+      });
+  }
+
+  // The Sync List will be where specifically our MagicTexters live
+  function createSyncList(serviceSid) {
+    return client.sync
+      .services(serviceSid)
+      .syncLists.create({
+        uniqueName: "magic_demo_texters",
+      })
+      .catch((err) => {
+        throw new Error(err.details);
+      });
+  }
+
+  // Get the SID of the number previously specified in the ENV
+  function getPhoneNumberSid() {
+    return new Promise((resolve, reject) => {
+      client.incomingPhoneNumbers
+        .list({
+          phoneNumber: process.env.TWILIO_PHONE_NUMBER,
+          limit: 1,
+        })
+        .then((incomingPhoneNumbers) => {
+          const n = incomingPhoneNumbers[0];
+          resolve(n.sid);
+        })
+        .catch((err) => reject(err));
+    });
+  }
+
+  // Deploy a new Studio flow
+  function deployStudioFlow() {
+    return new Promise((resolve, reject) => {
+      const flowDefinitionAsset =
+        Runtime.getAssets()["/flows/receive_call.json"];
+      const definition = flowDefinitionAsset.open().replace(/magic-demo-\d+-dev.twil.io/g, context.DOMAIN_NAME);
+      client.studio.v2.flows
+        .create({
+          commitMessage: "Deployed via setup script",
+          friendlyName: "Complex Magic handler",
+          status: "published",
+          definition,
+        })
+        .then((flow) => {
+          console.log(`Flow ${flow.sid} deployed`);
+          resolve(flow);
+        })
+        .catch((err) => reject(err));
+    });
+  }
+
+  async function unbindPhoneFromMessagingServices(phoneNumberSid) {
+    const allServices = await client.messaging.v1.services.list();
+    await Promise.all(
+      allServices.map(async (service) => {
+        const mapping = client.messaging.v1
+          .services(service.sid)
+          .phoneNumbers(phoneNumberSid);
+        try {
+          await mapping.fetch();
+        } catch (e) {
+          const RESOURCE_NOT_FOUND = e.code === 20404;
+          if (RESOURCE_NOT_FOUND) {
+            return;
+          }
+          throw e;
+        }
+        await mapping.remove();
+        console.log(
+          `The phone number was decoupled from messaging service ${service.sid}.`
+        );
+      })
+    );
+  }
+
+  // Assing the phone number to the newly created Messaging service
+  function assignNumberToMessagingService(phoneNumberSid, serviceSid) {
+    return new Promise((resolve, reject) => {
+      client.messaging.v1
+        .services(serviceSid)
+        .phoneNumbers.create({
+          phoneNumberSid,
+        })
+        .then(resolve)
+        .catch((err) => reject(err));
+    });
+  }
+
+  // Using the number's SID, update it's webhook to the Function
+  function updatePhoneNumberWebhook(numberSid, prop, value) {
+    return new Promise((resolve, reject) => {
+      client
+        .incomingPhoneNumbers(numberSid)
+        .update({
+          [prop]: value,
+        })
+        .then(() => {
+          resolve("success");
+        })
+        .catch((err) => reject(err));
+    });
+  }
 
   // In the steps above we'll need to get the current environment
   // based on the domain name this function is running in

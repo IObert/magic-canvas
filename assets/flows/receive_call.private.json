@@ -1,0 +1,227 @@
+{
+    "description": "Flow to check for the secret passcode",
+    "states": [
+      {
+        "name": "Trigger",
+        "type": "trigger",
+        "transitions": [
+          {
+            "event": "incomingMessage"
+          },
+          {
+            "next": "Welcome",
+            "event": "incomingCall"
+          },
+          {
+            "event": "incomingConversationMessage"
+          },
+          {
+            "event": "incomingRequest"
+          },
+          {
+            "event": "incomingParent"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      },
+      {
+        "name": "ask_passcode",
+        "type": "gather-input-on-call",
+        "transitions": [
+          {
+            "event": "keypress"
+          },
+          {
+            "next": "is_passcode_correct",
+            "event": "speech"
+          },
+          {
+            "next": "try_again",
+            "event": "timeout"
+          }
+        ],
+        "properties": {
+          "voice": "alice",
+          "speech_timeout": "auto",
+          "offset": {
+            "x": 260,
+            "y": 590
+          },
+          "loop": 1,
+          "hints": "Magic",
+          "finish_on_key": "#",
+          "say": "What is the secret passcode?",
+          "language": "en-US",
+          "stop_gather": false,
+          "gather_language": "en-US",
+          "profanity_filter": "true",
+          "timeout": 5
+        }
+      },
+      {
+        "name": "ask_for_name",
+        "type": "gather-input-on-call",
+        "transitions": [
+          {
+            "event": "keypress"
+          },
+          {
+            "next": "thanks",
+            "event": "speech"
+          },
+          {
+            "next": "send_magic",
+            "event": "timeout"
+          }
+        ],
+        "properties": {
+          "voice": "alice",
+          "speech_timeout": "auto",
+          "offset": {
+            "x": 190,
+            "y": 1190
+          },
+          "loop": 1,
+          "finish_on_key": "#",
+          "say": "Great. Please say your name if you want to see it on the board. Or just hang up to send some magic anonymously.",
+          "language": "en-US",
+          "stop_gather": true,
+          "gather_language": "en",
+          "profanity_filter": "true",
+          "timeout": 5
+        }
+      },
+      {
+        "name": "is_passcode_correct",
+        "type": "split-based-on",
+        "transitions": [
+          {
+            "next": "try_again",
+            "event": "noMatch"
+          },
+          {
+            "next": "ask_for_name",
+            "event": "match",
+            "conditions": [
+              {
+                "friendly_name": "If value equal_to Magic",
+                "arguments": [
+                  "{{widgets.ask_passcode.SpeechResult}}"
+                ],
+                "type": "contains",
+                "value": "Magic"
+              }
+            ]
+          }
+        ],
+        "properties": {
+          "input": "{{widgets.ask_passcode.SpeechResult}}",
+          "offset": {
+            "x": 230,
+            "y": 890
+          }
+        }
+      },
+      {
+        "name": "try_again",
+        "type": "say-play",
+        "transitions": [
+          {
+            "next": "ask_passcode",
+            "event": "audioComplete"
+          }
+        ],
+        "properties": {
+          "voice": "alice",
+          "offset": {
+            "x": 850,
+            "y": 330
+          },
+          "loop": 1,
+          "say": "I understood: {{widgets.ask_passcode.SpeechResult}}.\nWhich is unfortunately not the correct passcode.",
+          "language": "en-US"
+        }
+      },
+      {
+        "name": "Welcome",
+        "type": "say-play",
+        "transitions": [
+          {
+            "next": "ask_passcode",
+            "event": "audioComplete"
+          }
+        ],
+        "properties": {
+          "voice": "alice",
+          "offset": {
+            "x": 250,
+            "y": 340
+          },
+          "loop": 1,
+          "say": "Welcome to our demo bot.",
+          "language": "en-US"
+        }
+      },
+      {
+        "name": "send_magic",
+        "type": "run-function",
+        "transitions": [
+          {
+            "event": "success"
+          },
+          {
+            "event": "fail"
+          }
+        ],
+        "properties": {
+          "service_sid": "ZSe27a09b70d6299330d7121eaad83b0e7",
+          "environment_sid": "ZE4b179ec5418dbb4f5aa72d9523caefa8",
+          "offset": {
+            "x": 420,
+            "y": 1670
+          },
+          "function_sid": "ZHc53217267d88925788e9dc652fe3dca6",
+          "parameters": [
+            {
+              "value": "{{widgets.ask_for_name.SpeechResult}}",
+              "key": "name"
+            },
+            {
+              "value": "voice",
+              "key": "channel"
+            }
+          ],
+          "url": "https://magic-demo-1860-dev.twil.io/post_magic"
+        }
+      },
+      {
+        "name": "thanks",
+        "type": "say-play",
+        "transitions": [
+          {
+            "next": "send_magic",
+            "event": "audioComplete"
+          }
+        ],
+        "properties": {
+          "voice": "alice",
+          "offset": {
+            "x": 20,
+            "y": 1450
+          },
+          "loop": 1,
+          "say": "Thank you {{widgets.ask_for_name.SpeechResult}} . You should see your magic on the board now.",
+          "language": "en-US"
+        }
+      }
+    ],
+    "initial_state": "Trigger",
+    "flags": {
+      "allow_concurrent_calls": true
+    }
+  }

@@ -20,7 +20,7 @@ exports.handler = function (context, event, callback) {
   if (check1) {
     check1
       .then(function () {
-        callback(null, "Posted");
+        callback(null, "Magic received, thanks!");
       })
       .catch(callback);
     return;
@@ -31,11 +31,11 @@ exports.handler = function (context, event, callback) {
   if (check2) {
     check2
       .then(function () {
-        callback(null, "Posted");
+        callback(null, "Magic received, thanks!");
       })
       .catch(callback);
     return;
   }
 
-  return callback(400);
+  return callback("Couldn't find magic in this payload");
 };
