@@ -1,6 +1,3 @@
-// const moment = require("moment");
-// const url = require("url");
-
 const GREETINGS = {
   _default: {
     text: "Hi there! Thanks for sending us magic",
@@ -17,7 +14,7 @@ const GREETINGS = {
 exports.handler = function (context, event, callback) {
   const translatedGreeting = GREETINGS[event.FromCountry] || GREETINGS._default;
 
-  const twiml = new Twilio.twiml.VoiceResponse(); // TODO gather name and transcribe it later
+  const twiml = new Twilio.twiml.VoiceResponse();
 
   twiml.say(
     {
@@ -34,7 +31,7 @@ exports.handler = function (context, event, callback) {
     .syncLists("MagicTexters")
     .syncListItems.create({
       data: { name: "Unknow caller", channel: "voice" },
-    }); // TODO gather name and transcribe it later
+    }); 
 
   request.then(function () {
     callback(null, twiml);

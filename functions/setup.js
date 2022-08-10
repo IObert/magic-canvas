@@ -22,6 +22,9 @@ exports.handler = async function (context, event, callback) {
   const syncList = await createSyncList(syncService.sid);
   console.log("Sync List created: " + syncList.sid);
 
+  const verifyService = await createVerifyService();
+  console.log("Verify Service created: " + verifyService.sid);
+
   const phoneNumberSid = await getPhoneNumberSid();
   if (!context.ADVANCED_VOICE) {
     await updatePhoneNumberWebhook(
@@ -56,6 +59,7 @@ exports.handler = async function (context, event, callback) {
     syncService.sid
   );
   await createEnvironmentVariable(environment, "TWILIO_API_KEY", key.sid);
+  await createEnvironmentVariable(environment, "VERIFY_SERVICE_SID", verifyService.sid);
   await createEnvironmentVariable(environment, "TWILIO_API_SECRET", key.secret);
   console.log("Hosted environment variables created");
 
@@ -84,6 +88,13 @@ exports.handler = async function (context, event, callback) {
       .catch((err) => {
         throw new Error(err.details);
       });
+  }
+
+  // Verify Service will be used to send OTPs
+  function createVerifyService() {
+    return client.verify.v2.services.create({
+      friendlyName: "magic_demo_verify",
+    });
   }
 
   // Sync Service will be the data-store and event broadcaster
@@ -133,7 +144,9 @@ exports.handler = async function (context, event, callback) {
     return new Promise((resolve, reject) => {
       const flowDefinitionAsset =
         Runtime.getAssets()["/flows/receive_call.json"];
-      const definition = flowDefinitionAsset.open().replace(/magic-demo-\d+-dev.twil.io/g, context.DOMAIN_NAME);
+      const definition = flowDefinitionAsset
+        .open()
+        .replace(/magic-demo-\d+-dev.twil.io/g, context.DOMAIN_NAME);
       client.studio.v2.flows
         .create({
           commitMessage: "Deployed via setup script",
