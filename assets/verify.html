@@ -120,15 +120,19 @@
               <label for="channel-email">Email</label>
             </div>
             <div id="phone-input">
-              <p>Enter your phone number:</p>
+              <p>Enter your phone number: *</p>
               <input type="tel" id="phone_number" />
             </div>
             <div id="email-input" style="display: none">
-              <p>Enter your email:</p>
+              <p>Enter your email: *</p>
               <input type="email" id="email" />
             </div>
             <p>Select your preferred language:</p>
             <select id="select-language"></select>
+            <div id="name-input">
+              <p>(Optional) Enter your name:</p>
+              <input type="name" id="name" />
+            </div>
             <input type="submit" value="Get a one-time passcode" />
             <span id="status" class="status"></span>
           </form>
@@ -189,7 +193,7 @@
     const statusSpan = document.getElementById("status");
     const modalStatusSpan = document.getElementById("modal-status");
 
-    function showModalStatus(message, options = {color: "gray"}) {
+    function showModalStatus(message, options = { color: "gray" }) {
       modalStatusSpan.style.color = options.color;
       modalStatusSpan.textContent = message;
     }
@@ -233,7 +237,7 @@
       data.append("to", to);
 
       try {
-        const response = await fetch("./start-verify", {
+        const response = await fetch("./start_verify", {
           method: "POST",
           body: data,
         });
@@ -245,7 +249,7 @@
           modal.style.display = "block";
           showModalStatus(
             `You have attempted to verify '${to}' too many times. If you received a code, enter it in the form. Otherwise, please wait 10 minutes and try again.`,
-            {color: "#a94442"}
+            { color: "#a94442" }
           );
         } else if (response.status >= 400) {
           clearStatus();
@@ -271,14 +275,16 @@
     async function checkOtp(event) {
       event.preventDefault();
       let code = document.getElementById("code");
+      const name = document.getElementById("name").value;
       showModalStatus(`Checking code ${code.value}...`);
 
       const data = new URLSearchParams();
       data.append("to", to);
       data.append("code", code.value);
-
+      data.append("name", name);
+      
       try {
-        const response = await fetch("./check-verify", {
+        const response = await fetch("./check_verify", {
           method: "POST",
           body: data,
         });
@@ -286,10 +292,10 @@
         const json = await response.json();
 
         if (json.success) {
-          showModalStatus("Verification success!", {color: "green"});
+          showModalStatus("Verification success!", { color: "green" });
           code.value = "";
         } else {
-          showModalStatus("Incorrect token!", {color: "#a94442"});
+          showModalStatus("Incorrect token!", { color: "#a94442" });
           code.value = "";
         }
       } catch (error) {

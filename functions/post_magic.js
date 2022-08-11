@@ -2,11 +2,12 @@ exports.handler = function (context, event, callback) {
   console.log(`Incoming magic from ${event.name} on channel ${event.channel}.`);
 
   const client = context.getTwilioClient();
+  const name = event.name || "Anonymous 🕵️";
   let request = client.sync
     .services(context.SYNC_SERVICE_SID)
     .syncLists("MagicTexters")
     .syncListItems.create({
-      data: { name: event.name, channel: event.channel },
+      data: { name, channel: event.channel },
     });
 
   request.then(function (result) {
