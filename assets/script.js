@@ -170,8 +170,8 @@ document.onreadystatechange = function () {
         shownMagics.push(magic.index);
         cleanUpArray();
         initParticles(config.particleNumber, config.x, config.y);
-        // document.querySelector(".circle-with-text").classList.add("end-state");
-        // document.querySelector("#button").classList.add("end-state");
+        // document.querySelector(".circle-with-text").classList.add("visible");
+        // document.querySelector("#button").classList.add("visible");
 
         document
           .querySelectorAll(".button")
@@ -180,7 +180,7 @@ document.onreadystatechange = function () {
         // debugger
         const buttonId = `#${magic.data.channel}-button`;
         toShow = document.querySelector(buttonId);
-        toShow.classList.add("end-state");
+        toShow.classList.add("visible");
         lastTimeout = setTimeout(() => (toShow.classList = "button"), 5000);
         document.querySelector("#waiting").innerHTML =
           '<span class="red">' +
