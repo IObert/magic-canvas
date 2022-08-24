@@ -74,14 +74,13 @@ The users can initiate a verification flow with the form accessible under `https
 
    `https://magic-demo-<ID HERE>-dev.twil.io/index.html`.
 
-
-
 By default, the following channels are enabled on the Magic Canvas:
 
 - Voice
 - Messaging
 
 If you want to enable more channels, follow the instructions in the next section.
+
 ## Additional Channels
 
 ### Auto-Magic
@@ -96,18 +95,17 @@ Once completed, set the environment variable `USE_WHATSAPP=true` to display the 
 
 ![WhatsApp Instructions](./docs/WhatsAppInstructions.png)
 
+### SendGrid
 
-### SendGrid 
+Use [Inbound Parse](https://docs.sendgrid.com/for-developers/parsing-email/setting-up-the-inbound-parse-webhook) from Twilio SendGrid to listen to trigger events in a Function on incoming emails.
 
-Use [Inbound Parse](https://docs.sendgrid.com/for-developers/parsing-email/setting-up-the-inbound-parse-webhook) from Twilio SendGrid  to listen to trigger events in a Function on incoming emails. 
 > Unfortunately, Inbound Parse uses `content-type: multipart/form-data` and functions [can only handle](https://stackoverflow.com/questions/73304225/email-to-sms-using-sendgrid-inboundparse-and-twilio/73307939?noredirect=1#comment129504368_73307939) `content-type: application/json`. Therefore, you need to use a middleware to convert the content type, as [this project / Docker image](https://github.com/IObert/content-type-converter) does.
 
 Once you connect the Inbound Parse and the function, set the environment variable `USE_SENDGRID=true` and `SENDGRID_EMAIL_ADDRESS=magic@sample.com`
- to display the Email instructions on the dashboard. 
+to display the Email instructions on the dashboard.
 
 ![Email Instructions](./docs/EmailInstructions.png)
 The user will also receive an email recipe once the email has been received. To successfully send this recipe, create a restricted [SendGrid API Key](https://docs.sendgrid.com/ui/account-and-settings/api-keys#creating-an-api-key) with the permission "Mail Send". This key should be the value of the `SENDGRID_API_KEY` environment variable.
-
 
 ### Verify
 
@@ -115,8 +113,6 @@ Set the environment variable `USE_VERIFY=true` and run the setup script (again) 
 
 `https://magic-demo-<ID HERE>-dev.twil.io/verify.html`.
 
-Every success verification will then trigger the magic animation on the dashboard. 
+Every success verification will then trigger the magic animation on the dashboard.
 
 > There is one additional step needed to use [Email Verifications](https://www.twilio.com/docs/verify/email#set-up-your-sendgrid-account) with Twilio SendGrid.
-
-

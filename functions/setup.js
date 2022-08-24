@@ -72,9 +72,6 @@ exports.handler = async function (context, event, callback) {
     );
   }
 
-
-  
-
   // This will end the function!
   return callback(null, "Setup successfully ran!");
 

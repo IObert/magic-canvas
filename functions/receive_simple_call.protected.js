@@ -31,7 +31,7 @@ exports.handler = function (context, event, callback) {
     .syncLists("magic_demo_texters")
     .syncListItems.create({
       data: { name: "Unknow caller", channel: "voice" },
-    }); 
+    });
 
   request.then(function () {
     callback(null, twiml);

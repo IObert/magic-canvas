@@ -106,9 +106,7 @@
             {
               "type": "contains",
               "friendly_name": "If value equal_to Magic",
-              "arguments": [
-                "{{widgets.ask_passcode.SpeechResult}}"
-              ],
+              "arguments": ["{{widgets.ask_passcode.SpeechResult}}"],
               "value": "Magic"
             }
           ],
