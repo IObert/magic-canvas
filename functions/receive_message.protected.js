@@ -11,7 +11,7 @@ exports.handler = function (context, event, callback) {
     const channel = isWhatsapp ? "whatsapp" : "sms";
     twiml.message(
       { to: event.From },
-      `Nice! Thanks ${name} for sending us some Twilio Magic.`
+      `Nice! Thanks, ${name}, for sending us some Twilio Magic.\n\nWe won't use this number for ANY proactive communication and redact all log data.\n\nFor more details, please visit www.twilio.com/legal/privacy`
     );
 
     const twilioClient = context.getTwilioClient();

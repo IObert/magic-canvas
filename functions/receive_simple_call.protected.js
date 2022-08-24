@@ -1,11 +1,11 @@
 const GREETINGS = {
   _default: {
-    text: "Hi there! Thanks for sending us magic",
+    text: "Hi there! Thanks for sending us magic. We won't use your number for ANY proactive communication and redact all log data.",
     language: "en-US",
     voice: "Polly.Joey",
   },
   DE: {
-    text: "Hallo! Vielen Dank, dass Sie uns etwas Magie senden",
+    text: "Hallo! Vielen Dank, dass Sie uns etwas Magie senden. Datenschutz ist uns wichtig, wir werden diese Nummer für keine von uns initiiert Kommunikation verwenden und die Logs regelmäßig löschen.",
     language: "de-DE",
     voice: "Polly.Hans",
   },

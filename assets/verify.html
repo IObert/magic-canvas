@@ -74,10 +74,17 @@
       <div class="content">
         <section>
           <p>
-            This example shows how to deploy
+            This form uses
             <a href="https://twilio.com/docs/verify/api">Twilio Verify</a>
-            and Twilio functions for serverless one-time passcode (OTP) user
-            verification.
+            for one-time passcode (OTP) user verification via multiple channels.
+          </p>
+          <p>
+            We will neither use your number nor your email adress for ANY proactive communication and redact
+            all log data.
+          </p>
+          <p>
+            For more details, please visit
+            <a href="www.twilio.com/legal/privacy">our Privacy Policy</a>.
           </p>
           <hr />
           <form id="send-code">
@@ -282,7 +289,7 @@
       data.append("to", to);
       data.append("code", code.value);
       data.append("name", name);
-      
+
       try {
         const response = await fetch("./check_verify", {
           method: "POST",
