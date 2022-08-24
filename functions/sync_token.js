@@ -29,6 +29,11 @@ exports.handler = function (context, _, callback) {
     token: accessToken.toJwt(),
     number: context.TWILIO_PHONE_NUMBER,
     email: context.SENDGRID_EMAIL_ADDRESS,
+    useSendGrid: context.USE_SENDGRID,
+    useWhatsApp: context.USE_WHATSAPP,
+    useVerify: context.USE_VERIFY,
+    autoMagic: context.AUTO_MAGIC,
+    autoMagicSender: context.AUTO_MAGIC_SENDER,
   });
 
   callback(null, response);

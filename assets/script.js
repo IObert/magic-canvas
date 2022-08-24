@@ -158,48 +158,6 @@ const frame = function () {
   window.requestAnimationFrame(frame);
 };
 
-const adaptConfig = function (response) {
-  response.json().then(function (config) {
-    if (config.AUTO_MAGIC) {
-      // Show some magic randomly
-      const random3to8 = Math.floor(Math.random() * 5 + 3);
-      const random3to8min = 1000 * 60 * random3to8;
-      setInterval(() => {
-        if (!document.hidden) {
-          insertMagic({
-            index: shownMagics.length,
-            data: {
-              name: config.AUTO_MAGIC_SENDER || "Anonymous 🕵️‍♂️",
-              channel: "twilio",
-            },
-          });
-        }
-      }, random3to8min);
-      console.log(
-        `Auto magic activated - will trigger in ${random3to8} minutes.`
-      );
-    }
-    const cube_side_voice = document.getElementsByClassName(
-      "text-instruction cube__face--front"
-    )[0];
-    const cube_side_sms = document.getElementsByClassName(
-      "text-instruction cube__face--top"
-    )[0];
-    const cube_side_whatsapp = document.getElementsByClassName(
-      "text-instruction cube__face--back"
-    )[0];
-    const cube_side_email = document.getElementsByClassName(
-      "text-instruction cube__face--bottom"
-    )[0];
-    if (!config.USE_WHATSAPP) {
-      cube_side_whatsapp.innerHTML = cube_side_voice.innerHTML;
-    }
-    if (!config.USE_SENDGRID) {
-      cube_side_email.innerHTML = cube_side_sms.innerHTML;
-    }
-  });
-};
-
 var shownMagics = [];
 
 function insertMagic(magic) {
@@ -233,7 +191,13 @@ function insertMagic(magic) {
 document.onreadystatechange = function () {
   if (document.readyState === "complete") {
     frame();
-    fetch("/config.json").then(adaptConfig);
+
+    getSyncToken(function (config) {
+      if (config) {
+        startSync(config.token);
+        applyConfig(config);
+      }
+    });
 
     // Function to get Sync token from Twilio Function
     function getSyncToken(callback) {
@@ -269,14 +233,49 @@ document.onreadystatechange = function () {
       });
     }
 
-    getSyncToken(function (responseData) {
-      if (responseData) {
-        startSync(responseData.token);
-        document
-          .querySelectorAll(".number")
-          .forEach((tag) => (tag.textContent = responseData.number));
-        document.querySelector("#email").textContent = responseData.email;
+    function applyConfig(config) {
+      document
+        .querySelectorAll(".number")
+        .forEach((tag) => (tag.textContent = config.number));
+      document.querySelector("#email").textContent = config.email;
+
+      if (config.autoMagic) {
+        // Show some magic randomly
+        const random3to8 = Math.floor(Math.random() * 5 + 3);
+        const random3to8min = 1000 * 60 * random3to8;
+        setInterval(() => {
+          if (!document.hidden) {
+            insertMagic({
+              index: shownMagics.length,
+              data: {
+                name: config.autoMagicSender || "Anonymous 🕵️‍♂️",
+                channel: "twilio",
+              },
+            });
+          }
+        }, random3to8min);
+        console.log(
+          `Auto magic activated - will trigger in ${random3to8} minutes.`
+        );
       }
-    });
+      const cube_side_voice = document.getElementsByClassName(
+        "text-instruction cube__face--front"
+      )[0];
+      const cube_side_sms = document.getElementsByClassName(
+        "text-instruction cube__face--top"
+      )[0];
+      const cube_side_whatsapp = document.getElementsByClassName(
+        "text-instruction cube__face--back"
+      )[0];
+      const cube_side_email = document.getElementsByClassName(
+        "text-instruction cube__face--bottom"
+      )[0];
+      if (!config.USE_WHATSAPP) {
+        cube_side_whatsapp.innerHTML = cube_side_voice.innerHTML;
+      }
+      if (!config.USE_SENDGRID) {
+        cube_side_email.innerHTML = cube_side_sms.innerHTML;
+      }
+    }
   }
 };

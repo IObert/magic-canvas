@@ -1,31 +1,60 @@
 exports.handler = async function (context, event, callback) {
-  // Check if we already ran and prevent duplicate setups.
-  if (
-    context.SYNC_SERVICE_SID &&
-    context.TWILIO_API_KEY &&
-    context.TWILIO_API_SECRET
-  ) {
-    return callback(null, "Previously ran!");
-  }
-
   // The Twilio node Client library
   const client = context.getTwilioClient();
 
-  // Create the required entities one by one and link them.
-
-  const key = await createApiKey();
-  console.log("API Key created: " + key.sid);
-
-  const syncService = await createSyncService();
-  console.log("Sync Service created: " + syncService.sid);
-
-  const syncList = await createSyncList(syncService.sid);
-  console.log("Sync List created: " + syncList.sid);
-
-  const verifyService = await createVerifyService();
-  console.log("Verify Service created: " + verifyService.sid);
-
+  // With all of our resources created, we need to store some
+  // of them inside our hosted ENV in order for use later
+  const environment = await getCurrentEnvironment();
   const phoneNumberSid = await getPhoneNumberSid();
+
+  // Check if we already ran and prevent duplicate setups.
+  const minimalSetupPresent =
+    context.SYNC_SERVICE_SID &&
+    context.TWILIO_API_KEY &&
+    context.TWILIO_API_SECRET;
+  if (!minimalSetupPresent) {
+    const key = await createApiKey();
+    await createEnvironmentVariable(environment, "TWILIO_API_KEY", key.sid);
+    await createEnvironmentVariable(
+      environment,
+      "TWILIO_API_SECRET",
+      key.secret
+    );
+    console.log(`API Key ${key.sid} created and stored in environment.`);
+
+    const syncService = await createSyncService();
+    await createEnvironmentVariable(
+      environment,
+      "SYNC_SERVICE_SID",
+      syncService.sid
+    );
+    console.log(
+      `Sync Service created: ${syncService.sid} and stored in environment.`
+    );
+
+    const syncList = await createSyncList(syncService.sid);
+    console.log("Sync List created: " + syncList.sid);
+
+    await unbindPhoneFromMessagingServices(phoneNumberSid);
+    const messagingService = await createMessagingService();
+    await assignNumberToMessagingService(phoneNumberSid, messagingService.sid);
+    console.log(
+      `Messaging service ${messagingService.sid} assigned to ${phoneNumberSid}`
+    );
+  }
+
+  if (!context.VERIFY_SERVICE_SID && context.USE_VERIFY) {
+    const verifyService = await createVerifyService();
+    await createEnvironmentVariable(
+      environment,
+      "VERIFY_SERVICE_SID",
+      verifyService.sid
+    );
+    console.log(
+      `Verify Service ${verifyService.sid} created and stored in environment`
+    );
+  }
+
   if (!context.ADVANCED_VOICE) {
     await updatePhoneNumberWebhook(
       phoneNumberSid,
@@ -43,25 +72,8 @@ exports.handler = async function (context, event, callback) {
     );
   }
 
-  await unbindPhoneFromMessagingServices(phoneNumberSid);
-  const messagingService = await createMessagingService(); //TODO add message handler URL
-  await assignNumberToMessagingService(phoneNumberSid, messagingService.sid);
-  console.log(
-    `Messaging service ${messagingService.sid} assigned to ${phoneNumberSid}`
-  );
 
-  // With all of our entities created, we need to store some
-  // of them inside our hosted ENV in order for use later
-  const environment = await getCurrentEnvironment();
-  await createEnvironmentVariable(
-    environment,
-    "SYNC_SERVICE_SID",
-    syncService.sid
-  );
-  await createEnvironmentVariable(environment, "TWILIO_API_KEY", key.sid);
-  await createEnvironmentVariable(environment, "VERIFY_SERVICE_SID", verifyService.sid);
-  await createEnvironmentVariable(environment, "TWILIO_API_SECRET", key.secret);
-  console.log("Hosted environment variables created");
+  
 
   // This will end the function!
   return callback(null, "Setup successfully ran!");
