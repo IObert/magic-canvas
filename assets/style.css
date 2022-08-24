@@ -80,50 +80,12 @@ body {
   z-index: 9999;
 }
 
-.magic-container .text-container {
-  z-index: 9999;
-}
-
-.magic-container .text-container.nomt {
-  margin-top: -50px;
-}
-
-.magic-container .text-container .circles {
-  display: flex;
-}
-
-.magic-container .text-container .circle-with-text {
-  border: 2px solid #abb1cf;
-  justify-content: center;
-  align-items: center;
-  border-radius: 100%;
-  text-align: center;
-  font-size: 35px;
-  line-height: 0.8;
-  padding: 100px;
-  display: flex;
-  height: 225px;
-  width: 225px;
-  color: #dfe1f0;
-  transition: all 0.5s ease;
-}
-
-.magic-container .text-container .small {
-  color: #abb1cf;
-  font-size: 3em;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.magic-container .text-container .large {
-  font-family: "Playfair Display", serif;
-  font-size: 7em;
-  color: #dfe1f0;
-  text-align: center;
-}
-
-#twilio-button {
+#twilio-background {
+  width: 550px;
+  height: 550px;
   background: #fff;
+  position: absolute;
+  border-radius: 100%;
 }
 
 .magic-container .button {
@@ -137,10 +99,33 @@ body {
   transition: all 0.5s ease;
 }
 
+#voice-button {
+  margin-left: -135px;
+  margin-top: -135px;
+}
+
+#sms-button,
+#whatsapp-button {
+  margin-left: 135px;
+  margin-top: -135px;
+}
+
+#email-button {
+  margin-left: -135px;
+  margin-top: 135px;
+}
+
+#verify-button {
+  margin-left: 135px;
+  margin-top: 135px;
+}
+
 .magic-container .button.visible {
-  width: 110px;
-  height: 110px;
+  width: 100px;
+  height: 100px;
   padding: 5px;
+  margin-left: 135px;
+  margin-top: 135px;
 }
 
 .magic-container .results {

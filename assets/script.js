@@ -1,7 +1,7 @@
 /* Particle Explosion by Dean Wagman https://codepen.io/deanwagman/pen/EjLBdQ */
 let canvas = document.querySelector("#canvas"),
   ctx = canvas.getContext("2d"),
-  lastTimeout;
+  timeoutMap = {};
 
 // Set Canvas to be window size
 canvas.width = window.innerWidth;
@@ -207,18 +207,20 @@ function insertMagic(magic) {
     shownMagics.push(magic.index);
     cleanUpArray();
     initParticles(config.particleNumber, config.x, config.y);
-    // document.querySelector(".circle-with-text").classList.add("visible");
-    // document.querySelector("#button").classList.add("visible");
 
-    document
-      .querySelectorAll(".button")
-      .forEach((tag) => (tag.classList = "button"));
-    lastTimeout && clearTimeout(lastTimeout);
-    // debugger
+    if (timeoutMap[magic.data.channel]) {
+      clearTimeout(timeoutMap[magic.data.channel]);
+    }
+
     const buttonId = `#${magic.data.channel}-button`;
-    toShow = document.querySelector(buttonId);
-    toShow.classList.add("visible");
-    lastTimeout = setTimeout(() => (toShow.classList = "button"), 5000);
+    const toShow = document.querySelector(buttonId);
+    if (toShow) {
+      toShow.classList.add("visible");
+      timeoutMap[magic.data.channel] = setTimeout(
+        () => (toShow.classList = "button"),
+        5000
+      );
+    }
     document.querySelector("#waiting").innerHTML =
       '<span class="red">' +
       magic.data.name +
