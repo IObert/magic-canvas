@@ -155,7 +155,7 @@ exports.handler = async function (context, event, callback) {
         Runtime.getAssets()["/flows/receive_call.json"];
       const definition = flowDefinitionAsset
         .open()
-        .replace(/magic-demo-\d+-dev.twil.io/g, context.DOMAIN_NAME);
+        .replace(/magic-canvas-\d+-dev.twil.io/g, context.DOMAIN_NAME);
       client.studio.v2.flows
         .create({
           commitMessage: "Deployed via setup script",

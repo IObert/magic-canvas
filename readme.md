@@ -35,7 +35,7 @@ The sparkles will ignite when the user sends an email to the displayed address. 
 
 ## Verify
 
-The users can initiate a verification flow with the form accessible under `https://magic-demo-<id>-dev.twil.io/verify.html`. This form lets them request a One-Time-Password (OTP) via any of the above channels and optionally enter their alias. A dialog will pop up, and they can enter the OTP they received. Each successful verification will trigger the sparkles, and the Verify logo will pop up.
+The users can initiate a verification flow with the form accessible under `https://magic-canvas-<id>-dev.twil.io/verify.html`. This form lets them request a One-Time-Password (OTP) via any of the above channels and optionally enter their alias. A dialog will pop up, and they can enter the OTP they received. Each successful verification will trigger the sparkles, and the Verify logo will pop up.
 
 `#Verify`, `#SendGrid`, `#Function`
 
@@ -68,11 +68,11 @@ The users can initiate a verification flow with the form accessible under `https
    npm run deploy
    ```
 
-4. This project leverages [Twilio Functions](https://www.twilio.com/docs/runtime/functions) to relieve you from manually creating the messaging service and Studio flow. Once the project is deployed, access the "setup page" to run the setup script that creates the artifacts and ties them together. The URL of this page follows this pattern: `https://magic-demo-<ID HERE>-dev.twil.io/setup`.
+4. This project leverages [Twilio Functions](https://www.twilio.com/docs/runtime/functions) to relieve you from manually creating the messaging service and Studio flow. Once the project is deployed, access the "setup page" to run the setup script that creates the artifacts and ties them together. The URL of this page follows this pattern: `https://magic-canvas-<ID HERE>-dev.twil.io/setup`.
 
 5. Access the dashboard to see the instructions and magic animations.
 
-   `https://magic-demo-<ID HERE>-dev.twil.io/index.html`.
+   `https://magic-canvas-<ID HERE>-dev.twil.io/index.html`.
 
 By default, the following channels are enabled on the Magic Canvas:
 
@@ -111,7 +111,7 @@ The user will also receive an email recipe once the email has been received. To 
 
 Set the environment variable `USE_VERIFY=true` and run the setup script (again) to create the required Verify service. Then you can open the "Verify" demo page to use the form to receive your One-Time-Password (OTP). The URL of the page follows this pattern:
 
-`https://magic-demo-<ID HERE>-dev.twil.io/verify.html`.
+`https://magic-canvas-<ID HERE>-dev.twil.io/verify.html`.
 
 Every success verification will then trigger the magic animation on the dashboard.
 
