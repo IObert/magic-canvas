@@ -241,8 +241,8 @@ document.onreadystatechange = function () {
 
       if (config.autoMagic) {
         // Show some magic randomly
-        const random3to8 = Math.floor(Math.random() * 5 + 3);
-        const random3to8min = 1000 * 60 * random3to8;
+        const random1to4 = Math.floor(Math.random() * 3 + 1);
+        const random1to4min = 1000 * 60 * random1to4;
         setInterval(() => {
           if (!document.hidden) {
             insertMagic({
@@ -253,9 +253,9 @@ document.onreadystatechange = function () {
               },
             });
           }
-        }, random3to8min);
+        }, random1to4min);
         console.log(
-          `Auto magic activated - will trigger in ${random3to8} minutes.`
+          `Auto magic activated - will trigger in ${random1to4} minutes.`
         );
       }
       const cube_side_voice = document.getElementsByClassName(
