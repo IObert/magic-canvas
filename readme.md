@@ -91,23 +91,21 @@ You can activate "Auto Magic" if you want to avoid void on the dashboard. Set th
 ### WhatsApp
 
 The setup script is unfornately not able to add WhatsApp senders to a messaging service. This means it's up to you to (a) [request to enable your Twilio numbers for WhatsApp](https://www.twilio.com/whatsapp/request-access) and (b) [add WhatsApp senders to your messaging service](https://support.twilio.com/hc/en-us/articles/223181308-Getting-started-with-Messaging-Services#h_01F906R1JEWZA226ZR3CKR0Y4F).
-#TODO 
+
 Once completed, set the environment variable `USE_WHATSAPP=true` to display the WhatsApp instructions on the dashboard.
+
 ![WhatsApp Instructions](./docs/WhatsAppInstructions.png)
 
 
 ### SendGrid 
 
-
-
-#TODO 
 Once completed, set the environment variable `USE_SENDGRID=true` to display the Email instructions on the dashboard.
+
 ![Email Instructions](./docs/EmailInstructions.png)
 
 
 ### Verify
 
-#TODO 
 Set the environment variable `USE_VERIFY=true` and run the setup script (again) to create the required verify service. Then you can open the "Verify" demo page to use the form to receive your One-Time-Password (OTP). The URl of the page follows this pattern:
 
 `https://magic-demo-<ID HERE>-dev.twil.io/verify.html`.

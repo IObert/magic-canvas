@@ -1,5 +1,5 @@
 exports.handler = function (context, _, callback) {
-  const TWILIO_ACCOUNT_SID = context.TWILIO_ACCOUNT_SID;
+  const TWILIO_ACCOUNT_SID = context.ACCOUNT_SID;
   const SERVICE_SID = context.SYNC_SERVICE_SID;
   const API_KEY = context.TWILIO_API_KEY;
   const API_SECRET = context.TWILIO_API_SECRET;

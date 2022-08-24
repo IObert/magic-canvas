@@ -217,7 +217,7 @@ document.onreadystatechange = function () {
         .then(callback);
     }
 
-    // Connect to Sync "MagicTexters" List
+    // Connect to Sync "magic_demo_texters" List
     function startSync(token) {
       var syncClient = new Twilio.Sync.Client(token);
 
@@ -225,7 +225,7 @@ document.onreadystatechange = function () {
         getSyncToken(syncClient.updateToken);
       });
 
-      syncClient.list("MagicTexters").then(function (list) {
+      syncClient.list("magic_demo_texters").then(function (list) {
         list.on("itemAdded", function (event) {
           console.log(event.item.index);
           insertMagic(event.item);
@@ -270,10 +270,10 @@ document.onreadystatechange = function () {
       const cube_side_email = document.getElementsByClassName(
         "text-instruction cube__face--bottom"
       )[0];
-      if (!config.USE_WHATSAPP) {
+      if (!config.useWhatsApp) {
         cube_side_whatsapp.innerHTML = cube_side_voice.innerHTML;
       }
-      if (!config.USE_SENDGRID) {
+      if (!config.useSendGrid) {
         cube_side_email.innerHTML = cube_side_sms.innerHTML;
       }
     }

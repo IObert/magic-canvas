@@ -10,7 +10,7 @@ exports.handler = function (context, event, callback) {
       const twilioClient = context.getTwilioClient();
       return twilioClient.sync
         .services(context.SYNC_SERVICE_SID)
-        .syncLists("MagicTexters")
+        .syncLists("magic_demo_texters")
         .syncListItems.create({ data: { name, channel: "email" } });
     }
   }

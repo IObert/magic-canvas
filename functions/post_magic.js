@@ -5,7 +5,7 @@ exports.handler = function (context, event, callback) {
   const name = event.name || "Anonymous 🕵️";
   let request = client.sync
     .services(context.SYNC_SERVICE_SID)
-    .syncLists("MagicTexters")
+    .syncLists("magic_demo_texters")
     .syncListItems.create({
       data: { name, channel: event.channel },
     });

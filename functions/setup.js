@@ -59,7 +59,7 @@ exports.handler = async function (context, event, callback) {
     await updatePhoneNumberWebhook(
       phoneNumberSid,
       "voiceUrl",
-      `https://${context.DOMAIN_NAME}/receive_call`
+      `https://${context.DOMAIN_NAME}/receive_simple_call`
     );
     console.log(
       `Phone number ${phoneNumberSid} updated with simple voice flow`
@@ -123,7 +123,7 @@ exports.handler = async function (context, event, callback) {
       });
   }
 
-  // The Sync List will be where specifically our MagicTexters live
+  // The Sync List will be where specifically our magic_demo_texters live
   function createSyncList(serviceSid) {
     return client.sync
       .services(serviceSid)

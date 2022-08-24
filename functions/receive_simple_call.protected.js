@@ -28,7 +28,7 @@ exports.handler = function (context, event, callback) {
 
   let request = twilioClient.sync
     .services(context.SYNC_SERVICE_SID)
-    .syncLists("MagicTexters")
+    .syncLists("magic_demo_texters")
     .syncListItems.create({
       data: { name: "Unknow caller", channel: "voice" },
     }); 

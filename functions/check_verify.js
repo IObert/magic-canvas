@@ -42,7 +42,7 @@ exports.handler = async function (context, event, callback) {
     if (check.status === "approved") {
       await client.sync
         .services(context.SYNC_SERVICE_SID)
-        .syncLists("MagicTexters")
+        .syncLists("magic_demo_texters")
         .syncListItems.create({
           data: { name, channel: "verify" },
         });
