@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "setup": "node -r dotenv/config functions/setup.js",
+    "clear-logs": "node -r dotenv/config util/clear_logs.js",
     "start": "twilio-run",
     "deploy": "twilio-run deploy"
   },
